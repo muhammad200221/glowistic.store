@@ -17,12 +17,13 @@ import { SearchModal } from './components/SearchModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AboutModal, ContactModal } from './components/InfoModals';
 import { Footer } from './components/Footer';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ComingSoon } from './components/ComingSoon';
+import { ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 
 const MainContent: React.FC = () => {
   const { isRTL, t } = useLanguage();
 
-  const [currentView, setCurrentView] = useState<'home' | 'shop'>('home');
+  const [currentView, setCurrentView] = useState<'coming_soon' | 'home' | 'shop'>('coming_soon');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
@@ -151,8 +152,32 @@ const MainContent: React.FC = () => {
 
   const totalCartCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
 
+  if (currentView === 'coming_soon') {
+    return <ComingSoon />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#1A1816]">
+      {/* Top Preview Mode Notification Bar */}
+      <div className="bg-[#1A1816] text-[#FAF9F5] text-xs py-2 px-4 border-b border-[#3A3229] flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#E58C4A] animate-pulse" />
+          <span className="font-medium text-[#FAF9F5] text-[11px] sm:text-xs">
+            {t('previewBannerNotice')}
+          </span>
+        </div>
+        <button
+          onClick={() => {
+            setCurrentView('coming_soon');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="px-3 py-1 rounded-xs bg-[#2F2720] hover:bg-[#44382E] text-[#E5B887] text-[11px] font-medium border border-[#524436] transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
+        >
+          <Sparkles className="w-3 h-3 text-[#E5B887]" />
+          <span>{t('backToComingSoonBtn')}</span>
+        </button>
+      </div>
+
       <Header
         cartCount={totalCartCount}
         wishlistCount={wishlistIds.length}

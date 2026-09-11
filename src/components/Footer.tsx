@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Send, Check, ShieldCheck, Heart } from 'lucide-react';
+import { Send, Check, ShieldCheck, Heart, MessageCircle, Camera } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { ProductCategory } from '../types';
+import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
 
 interface FooterProps {
   onSelectCategory: (cat: ProductCategory) => void;
@@ -89,6 +90,28 @@ export const Footer: React.FC<FooterProps> = ({
               <ShieldCheck className="w-4 h-4 text-[#E5B887]" />
               <span>{t('secureShoppingBadge')}</span>
             </div>
+
+            <div className="pt-1 flex flex-wrap items-center gap-2">
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xs bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-[#85E3A0] hover:text-white transition-colors text-xs font-medium cursor-pointer shadow-xs"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                <span>{t('contactWhatsapp')}</span>
+              </a>
+
+              <a
+                href={INSTAGRAM_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xs bg-[#E1306C]/15 hover:bg-[#E1306C]/25 border border-[#E1306C]/35 text-[#F692B4] hover:text-white transition-colors text-xs font-medium cursor-pointer shadow-xs"
+              >
+                <Camera className="w-3.5 h-3.5 text-[#E1306C]" />
+                <span>{t('contactInstagram')}</span>
+              </a>
+            </div>
           </div>
 
           <div>
@@ -156,6 +179,28 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="hover:text-white transition-colors cursor-pointer">
                   {t('boutiqueTitle')}
                 </span>
+              </li>
+              <li>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[#65D285] hover:text-[#88E5A3] transition-colors cursor-pointer"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                  <span>{t('contactWhatsapp')}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={INSTAGRAM_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[#E7799B] hover:text-[#F3A4BC] transition-colors cursor-pointer"
+                >
+                  <Camera className="w-3.5 h-3.5 text-[#E1306C]" />
+                  <span>{t('contactInstagram')}</span>
+                </a>
               </li>
             </ul>
           </div>

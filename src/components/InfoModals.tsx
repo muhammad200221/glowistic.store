@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, MapPin, Phone, Mail, Clock, Send, Check } from 'lucide-react';
+import { X, MapPin, Phone, Mail, Clock, Send, Check, MessageCircle, Camera, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
 
 interface ModalBaseProps {
   isOpen: boolean;
@@ -54,7 +55,7 @@ export const AboutModal: React.FC<ModalBaseProps> = ({ isOpen, onClose }) => {
 };
 
 export const ContactModal: React.FC<ModalBaseProps> = ({ isOpen, onClose }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
 
   if (!isOpen) return null;
@@ -84,9 +85,65 @@ export const ContactModal: React.FC<ModalBaseProps> = ({ isOpen, onClose }) => {
         <h2 className="text-xl sm:text-2xl font-display font-medium text-[#1A1816] mb-1">
           {t('contactTitle')}
         </h2>
-        <p className="text-xs text-[#6B5E52] mb-6">
+        <p className="text-xs text-[#6B5E52] mb-5">
           {t('contactSubtitle')}
         </p>
+
+        {/* WhatsApp & Instagram Direct Cards */}
+        <div className="space-y-3 mb-6">
+          {/* WhatsApp Card */}
+          <div className="p-4 rounded-sm bg-[#F3FAF4] border border-[#CFE8D2] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-[#194D22]">
+                  {t('contactWhatsapp')}
+                </div>
+                <div className="text-[11px] text-[#476C4B]">
+                  {language === 'ckb' ? 'وەڵامدانەوەی خێرا و ڕاوێژی پسپۆڕی بەرهەمەکان' : language === 'ar' ? 'رد فوري واستشارة تجميلية متخصصة' : 'Fast response & product consultation'}
+                </div>
+              </div>
+            </div>
+            <a
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-[#25D366] hover:bg-[#20BD5A] text-white text-xs font-medium rounded-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs shrink-0"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>{t('contactWhatsapp')}</span>
+            </a>
+          </div>
+
+          {/* Instagram Card */}
+          <div className="p-4 rounded-sm bg-[#FAF5F2] border border-[#EEDAD0] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#E1306C] via-[#FD1D1D] to-[#F77737] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <Camera className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-[#3B2219] flex items-center gap-1.5">
+                  <span>{t('contactInstagram')}</span>
+                  <span className="text-[11px] font-mono text-[#8C532B] dir-ltr">{INSTAGRAM_HANDLE}</span>
+                </div>
+                <div className="text-[11px] text-[#78594D]">
+                  {t('instagramDesc')}
+                </div>
+              </div>
+            </div>
+            <a
+              href={INSTAGRAM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-[#1A1816] hover:bg-[#332A22] text-[#FAF9F5] text-xs font-medium rounded-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs shrink-0"
+            >
+              <span>{t('followInstagram')}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-[#E5B887]" />
+            </a>
+          </div>
+        </div>
 
         {submitted ? (
           <div className="py-12 text-center bg-white p-6 rounded-sm border border-[#EAE3D9]">

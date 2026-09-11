@@ -15,6 +15,7 @@ import {
 import { CartItem } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { ProductImage } from './ProductImage';
+import { isValidCoupon } from '../utils/vip';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -58,8 +59,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();
-    const code = couponCode.trim().toUpperCase();
-    if (code === 'GLOW20' || code === 'GLOWISTIC20' || code === 'LILAS20') {
+    const code = couponCode.trim();
+    if (isValidCoupon(code)) {
       setDiscountPercent(20);
       setCouponSuccess(true);
       setCouponError(false);

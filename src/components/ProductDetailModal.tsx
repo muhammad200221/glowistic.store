@@ -14,11 +14,14 @@ import {
   PenLine,
   AlertCircle,
   Sparkles,
+  MessageCircle,
+  Camera,
 } from 'lucide-react';
 import { Product, ProductShade } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { useReviews } from '../context/ReviewsContext';
 import { ProductImage } from './ProductImage';
+import { WHATSAPP_LINK, INSTAGRAM_LINK } from '../constants/contact';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -368,6 +371,29 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                     }`}
                   />
                 </button>
+              </div>
+
+              {/* Direct WhatsApp & Instagram Inquiries */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2 px-3 rounded-sm bg-[#F3FAF4] border border-[#CFE8D2] hover:bg-[#E7F6E9] text-[#194D22] text-xs font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  <span>{t('contactWhatsapp')}</span>
+                </a>
+
+                <a
+                  href={INSTAGRAM_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2 px-3 rounded-sm bg-[#FAF5F2] border border-[#EEDAD0] hover:bg-[#F3E6DF] text-[#70243C] text-xs font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                >
+                  <Camera className="w-4 h-4 text-[#E1306C]" />
+                  <span>{t('contactInstagram')}</span>
+                </a>
               </div>
 
               <div className="border-t border-[#EAE3D9] pt-6">
