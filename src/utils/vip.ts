@@ -155,3 +155,52 @@ export function isValidCoupon(code: string): boolean {
   const members = getVipMembers();
   return members.some(m => m.code.toUpperCase() === upper);
 }
+
+/**
+ * Generates an Excel-ready CSV string with UTF-8 BOM for perfect Kurdish/Arabic character support.
+ */
+export function generateVipCsv(): string {
+  const members = getVipMembers();
+  const headers = ['ژمارە (ID)', 'کۆدی VIP', 'پەیوەندی (مۆبایل یان ئیمەیڵ)', 'جۆر', 'بەروار و کاتی تۆمارکردن', 'داشکاندن', 'دۆخ'];
+  
+  const rows = members.map((m, index) => {
+    const dateFormatted = new Date(m.date).toLocaleString('en-GB', { timeZone: 'Asia/Baghdad' });
+    const typeLabel = m.type === 'phone' ? 'ژمارەی مۆبایل' : 'ئیمەیڵ';
+    return [
+      index + 1,
+      `"${m.code}"`,
+      `"${m.contact}"`,
+      `"${typeLabel}"`,
+      `"${dateFormatted}"`,
+      '"20%"',
+      '"تۆمارکراو (VIP)"',
+    ].join(',');
+  });
+
+  // UTF-8 BOM (\uFEFF) ensures Microsoft Excel correctly detects UTF-8 Arabic/Kurdish characters
+  return '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+}
+
+/**
+ * Downloads the VIP waitlist as an Excel (.csv) file directly.
+ */
+export function downloadVipExcel(): void {
+  const csvContent = generateVipCsv();
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0, 10);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `glowistic_vip_members_${dateStr}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+// Attach to window object for convenient access from browser console if needed
+if (typeof window !== 'undefined') {
+  (window as unknown as { downloadVipExcel: () => void; getVipWaitlist: () => VipMember[] }).downloadVipExcel = downloadVipExcel;
+  (window as unknown as { downloadVipExcel: () => void; getVipWaitlist: () => VipMember[] }).getVipWaitlist = getVipMembers;
+}
+
