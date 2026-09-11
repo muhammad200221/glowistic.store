@@ -1,14 +1,23 @@
 import React from 'react';
 import { ArrowRight, ArrowLeft, Droplets, Sparkles, Wind, Flame } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { ProductCategory } from '../types';
+import { Product, ProductCategory } from '../types';
+import { PRODUCTS } from '../data/products';
 
 interface FeaturedCategoriesProps {
   onSelectCategory: (category: ProductCategory) => void;
+  products?: Product[];
 }
 
-export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({ onSelectCategory }) => {
+export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({
+  onSelectCategory,
+  products = PRODUCTS,
+}) => {
   const { language, isRTL, t } = useLanguage();
+
+  const getCategoryCount = (catId: ProductCategory) => {
+    return products.filter((p) => p.category === catId).length;
+  };
 
   const categories: {
     id: ProductCategory;
@@ -24,11 +33,11 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({ onSelect
       id: 'skincare',
       name: t('catSkincare'),
       description: {
-        ckb: 'سێرۆم، کرێمی پێپتاید، دژەخۆری کانزایی',
-        ar: 'سيرومات، كريمات الببتيد، واقيات شمس معدنية',
-        en: 'Active serums, barrier creams, mineral veils',
+        ckb: 'سێرۆم، کرێمی پێپتاید، دژەخۆری کانزایی و شێدارکەرەوە',
+        ar: 'سيرومات، كريمات الببتيد، واقيات شمس معدنية ومرطبات',
+        en: 'Active serums, peptide creams, hydration & mineral veils',
       },
-      count: 24,
+      count: getCategoryCount('skincare'),
       bgClass: 'from-[#FAF4EE] to-[#EFE4D8]',
       borderClass: 'border-[#EADBCC]',
       icon: Droplets,
@@ -42,7 +51,7 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({ onSelect
         ar: 'أحمر شفاه كوتور، أساس كوشن، إشراقة مخملية',
         en: 'Couture satin lipsticks, silk cushions, radiance',
       },
-      count: 18,
+      count: getCategoryCount('makeup'),
       bgClass: 'from-[#FDF2F2] to-[#F3DCDD]',
       borderClass: 'border-[#E8C5C8]',
       icon: Sparkles,
@@ -56,7 +65,7 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({ onSelect
         ar: 'زيوت الأرغان، كيراتين نقي، علاج الأطراف',
         en: 'Moroccan argan nectars, biomimetic keratin',
       },
-      count: 12,
+      count: getCategoryCount('haircare'),
       bgClass: 'from-[#FAF7EE] to-[#EFE6CF]',
       borderClass: 'border-[#E7D9B8]',
       icon: Wind,
@@ -70,7 +79,7 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({ onSelect
         ar: 'عطور العود المعتق، مستخلص الزعفران الملكي',
         en: 'Prestige Cambodian agarwood, rare florals',
       },
-      count: 15,
+      count: getCategoryCount('fragrance'),
       bgClass: 'from-[#F6F2EC] to-[#E8DDD1]',
       borderClass: 'border-[#DCDEC6]',
       icon: Flame,

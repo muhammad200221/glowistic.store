@@ -3,7 +3,7 @@ import { Language } from '../types';
 export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   ckb: {
     // Top Bar & Header
-    announcement: 'گەیاندنی خێرا و بێبەرامبەر بۆ کڕینی سەرووی $50! کۆدی داشکاندن: GLOW20',
+    announcement: 'ئاگاداری: لە ئێستادا هیچ بەرهەمێک لە ستۆردا بەردەست نییە - بەم زووانە باری نوێ بەردەست دەبێتەوە',
     currency: 'دراو',
     language: 'زمان',
     home: 'سەرەکی',
@@ -58,6 +58,9 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     inStock: 'لە کۆگادا هەیە',
     onlyLeft: 'تەنها {count} دانە ماوە!',
     outOfStock: 'لە کۆگا نەماوە',
+    currentlyUnavailable: 'لە ئێستادا لە ستۆر بەردەست نییە',
+    currentlyUnavailableBadge: 'لە ئێستادا بەردەست نییە',
+    restockingSoon: 'بەم زووانە بەردەست دەبێتەوە',
     reviews: 'هەڵسەنگاندن',
 
     // Catalog & Filters
@@ -128,7 +131,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     applyCoupon: 'جێبەجێکردن',
     couponApplied: 'کۆدی داشکاندن بە سەرکەوتوویی زیادکرا (20% داشکاندن)',
     invalidCoupon: 'کۆدەکە هەڵەیە، تکایە دڵنیابەرەوە',
-    giftWrap: 'پێچانەوە بە پاکێجی دیاری شاهانە (+$3)',
+    giftWrap: 'پێچانەوە بە پاکێجی دیاری شاهانە (+4,000 د.ع)',
     subtotal: 'کۆی بەرهەمەکان',
     discountAmount: 'داشکاندن',
     shipping: 'تێچووی گەیاندن',
@@ -210,7 +213,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   ar: {
     // Top Bar & Header
-    announcement: 'شحن سريع ومجاني للطلبات الأكثر من $50! كود الخصم: GLOW20',
+    announcement: 'تنويه: جميع المنتجات غير متوفرة حالياً في المتجر - ستتوفر قريباً مع الشحنة الجديدة',
     currency: 'العملة',
     language: 'اللغة',
     home: 'الرئيسية',
@@ -265,6 +268,9 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     inStock: 'متوفر في المخزون',
     onlyLeft: 'تبقى فقط {count} قطع!',
     outOfStock: 'نفد من المخزون',
+    currentlyUnavailable: 'غير متوفر حالياً في المتجر',
+    currentlyUnavailableBadge: 'غير متوفر حالياً',
+    restockingSoon: 'سيتوفر قريباً بمشيئة الله',
     reviews: 'تقييم',
 
     // Catalog & Filters
@@ -335,7 +341,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     applyCoupon: 'تطبيق',
     couponApplied: 'تم تطبيق كود الخصم بنجاح (خصم 20%)',
     invalidCoupon: 'كود الخصم غير صالح، يرجى التأكد',
-    giftWrap: 'تغليف هدايا ملكي فاخر (+$3)',
+    giftWrap: 'تغليف هدايا ملكي فاخر (+4,000 د.ع)',
     subtotal: 'المجموع الفرعي',
     discountAmount: 'قيمة الخصم',
     shipping: 'تكلفة الشحن',
@@ -417,7 +423,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   en: {
     // Top Bar & Header
-    announcement: 'Complimentary express delivery on orders over $50! Use code: GLOW20',
+    announcement: 'Notice: All products are currently out of stock - Restocking coming soon',
     currency: 'Currency',
     language: 'Language',
     home: 'Home',
@@ -472,6 +478,9 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     inStock: 'In Stock',
     onlyLeft: 'Only {count} left in stock!',
     outOfStock: 'Out of Stock',
+    currentlyUnavailable: 'Currently Not in Store',
+    currentlyUnavailableBadge: 'Currently Unavailable',
+    restockingSoon: 'Restocking Soon',
     reviews: 'reviews',
 
     // Catalog & Filters
@@ -542,7 +551,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     applyCoupon: 'Apply',
     couponApplied: 'Discount code applied successfully (20% off)',
     invalidCoupon: 'Invalid coupon code. Please verify and retry',
-    giftWrap: 'Luxury keepsake gift packaging (+$3)',
+    giftWrap: 'Luxury keepsake gift packaging (+4,000 IQD)',
     subtotal: 'Subtotal',
     discountAmount: 'Discount',
     shipping: 'Delivery',

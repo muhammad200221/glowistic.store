@@ -5,6 +5,7 @@
     --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-arabic: 'Vazirmatn', -apple-system, system-ui, sans-serif;
+    --font-arabic-display: 'Amiri', 'Noto Naskh Arabic', serif;
   }
 
   [dir="rtl"] {
@@ -15,9 +16,23 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, .font-display {
+  [dir="ltr"] h1, 
+  [dir="ltr"] h2, 
+  [dir="ltr"] h3, 
+  [dir="ltr"] .font-display {
     font-family: var(--font-serif);
   }
+
+  [dir="rtl"] h1, 
+  [dir="rtl"] h2, 
+  [dir="rtl"] h3, 
+  [dir="rtl"] .font-display {
+    font-family: var(--font-arabic-display);
+  }
+}
+
+.font-royal-heading {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif;
 }
 
 /* Elegant scrollbar */

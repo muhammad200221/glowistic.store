@@ -23,7 +23,7 @@ export const Hero: React.FC<HeroProps> = ({ onShopClick, onExploreClick }) => {
               <span>2026 Collection</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-medium text-[#1A1816] tracking-tight leading-[1.15] mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold text-[#1A1816] tracking-normal leading-[1.3] sm:leading-[1.25] mb-6">
               {t('heroTitle')}
             </h1>
 

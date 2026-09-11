@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, ShoppingBag, Eye, Star, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Star, Check, AlertCircle } from 'lucide-react';
 import { Product, ProductShade } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { useReviews } from '../context/ReviewsContext';
@@ -38,7 +38,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     setTimeout(() => setJustAdded(false), 1800);
   };
 
-  const badgeText = product.isCollection
+  const badgeText = !product.inStock
+    ? t('currentlyUnavailableBadge')
+    : product.isCollection
     ? (language === 'ckb' ? 'سێت / کۆڵێکشن' : language === 'ar' ? 'طقم / مجموعة' : 'Value Set / Duo')
     : product.isBestSeller
     ? t('bestSeller')
@@ -58,9 +60,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           src={product.image}
           alt={product.name[language] || product.name.en}
           category={product.category}
-          className="w-full h-full"
+          className={`w-full h-full ${!product.inStock ? 'opacity-90' : ''}`}
           badge={badgeText}
         />
+
+        {!product.inStock && (
+          <div className="absolute top-3 start-3 z-10">
+            <span className="px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase rounded-xs bg-[#241E1A]/90 text-[#F5EDE3] backdrop-blur-xs border border-[#44382F] shadow-sm flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E58C4A] animate-pulse" />
+              <span>{t('currentlyUnavailableBadge')}</span>
+            </span>
+          </div>
+        )}
 
         <button
           onClick={(e) => {
@@ -103,9 +114,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {product.name[language] || product.name.en}
           </h3>
 
-          <p className="text-xs text-[#6B5E52] line-clamp-1 mb-3">
+          <p className="text-xs text-[#6B5E52] line-clamp-1 mb-2">
             {product.subtitle[language] || product.subtitle.en}
           </p>
+
+          {!product.inStock && (
+            <div className="mb-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FBF3EA] border border-[#ECDCCF] text-[#8C4B1F] text-[11px] font-medium">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0 text-[#C16223]" />
+              <span>{t('currentlyUnavailable')}</span>
+            </div>
+          )}
 
           {product.shades && product.shades.length > 0 && (
             <div className="flex items-center gap-1.5 mb-3" onClick={(e) => e.stopPropagation()}>
@@ -151,28 +169,42 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            disabled={justAdded}
-            className={`px-3 py-2 rounded-sm text-xs font-medium tracking-wide transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
-              justAdded
-                ? 'bg-emerald-700 text-white'
-                : 'bg-[#1A1816] text-[#FAF9F5] hover:bg-[#322A23] shadow-xs'
-            }`}
-            aria-label="Add to bag"
-          >
-            {justAdded ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">{t('addedToCart')}</span>
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="w-3.5 h-3.5 text-[#E5B887]" />
-                <span className="hidden xs:inline">{t('addToCart')}</span>
-              </>
-            )}
-          </button>
+          {product.inStock ? (
+            <button
+              onClick={handleAddToCart}
+              disabled={justAdded}
+              className={`px-3 py-2 rounded-sm text-xs font-medium tracking-wide transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                justAdded
+                  ? 'bg-emerald-700 text-white'
+                  : 'bg-[#1A1816] text-[#FAF9F5] hover:bg-[#322A23] shadow-xs'
+              }`}
+              aria-label="Add to bag"
+            >
+              {justAdded ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span className="hidden xs:inline">{t('addedToCart')}</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-3.5 h-3.5 text-[#E5B887]" />
+                  <span className="hidden xs:inline">{t('addToCart')}</span>
+                </>
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onQuickView(product);
+              }}
+              className="px-2.5 py-1.5 rounded-sm text-[11px] font-medium bg-[#EFE9E0] text-[#7A6E62] border border-[#DDD3C6] hover:bg-[#E6DEC2] transition-colors cursor-pointer shrink-0 flex items-center gap-1"
+              title={t('currentlyUnavailable')}
+            >
+              <Eye className="w-3 h-3 text-[#8C532B]" />
+              <span>{t('outOfStock')}</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

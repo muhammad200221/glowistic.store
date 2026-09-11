@@ -213,8 +213,9 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                         : t('inStock')}
                     </span>
                   ) : (
-                    <span className="text-xs font-medium text-rose-600">
-                      {t('outOfStock')}
+                    <span className="text-xs font-semibold text-[#B94E1A] bg-[#FAF1E8] px-2.5 py-1 rounded border border-[#E9D6C5] flex items-center gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 text-[#B94E1A]" />
+                      <span>{t('currentlyUnavailable')}</span>
                     </span>
                   )}
                 </div>
@@ -288,39 +289,62 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                 </div>
               )}
 
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex items-center border border-[#DECFC0] rounded-sm bg-white h-11">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={quantity <= 1}
-                    className="px-3 h-full text-[#54483C] hover:text-[#1A1816] disabled:opacity-40 transition-colors cursor-pointer"
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="px-3 text-xs font-mono font-bold text-[#1A1816] tabular-nums">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    disabled={quantity >= product.stockCount}
-                    className="px-3 h-full text-[#54483C] hover:text-[#1A1816] disabled:opacity-40 transition-colors cursor-pointer"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
+              {!product.inStock && (
+                <div className="mb-6 p-4 rounded bg-[#FAF2E8] border border-[#ECDCCF] text-start flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-[#B94E1A] shrink-0 mt-0.5" />
+                  <div className="text-xs space-y-1">
+                    <div className="font-bold text-[#8C4A1E]">
+                      {t('currentlyUnavailable')}
+                    </div>
+                    <div className="text-[#965A2C] leading-relaxed">
+                      {t('restockingSoon')}
+                    </div>
+                  </div>
                 </div>
+              )}
+
+              <div className="flex items-center gap-4 mb-8">
+                {product.inStock && (
+                  <div className="flex items-center border border-[#DECFC0] rounded-sm bg-white h-11">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      disabled={quantity <= 1}
+                      className="px-3 h-full text-[#54483C] hover:text-[#1A1816] disabled:opacity-40 transition-colors cursor-pointer"
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="px-3 text-xs font-mono font-bold text-[#1A1816] tabular-nums">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      disabled={quantity >= product.stockCount}
+                      className="px-3 h-full text-[#54483C] hover:text-[#1A1816] disabled:opacity-40 transition-colors cursor-pointer"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
 
                 <button
                   onClick={handleAddToCart}
                   disabled={!product.inStock || addedSuccess}
-                  className={`flex-1 h-11 px-6 rounded-sm text-xs font-medium tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
-                    addedSuccess
-                      ? 'bg-emerald-700 text-white'
-                      : 'bg-[#1A1816] text-[#FAF9F5] hover:bg-[#332A22]'
+                  className={`flex-1 h-11 px-6 rounded-sm text-xs font-medium tracking-wider uppercase transition-all flex items-center justify-center gap-2 ${
+                    !product.inStock
+                      ? 'bg-[#EAE3DA] text-[#86786B] border border-[#DCD1C4] cursor-not-allowed shadow-none'
+                      : addedSuccess
+                      ? 'bg-emerald-700 text-white cursor-pointer shadow-md'
+                      : 'bg-[#1A1816] text-[#FAF9F5] hover:bg-[#332A22] cursor-pointer shadow-md'
                   }`}
                 >
-                  {addedSuccess ? (
+                  {!product.inStock ? (
+                    <>
+                      <AlertCircle className="w-4 h-4 text-[#86786B]" />
+                      <span>{t('currentlyUnavailable')}</span>
+                    </>
+                  ) : addedSuccess ? (
                     <>
                       <Check className="w-4 h-4" />
                       <span>{t('addedToCart')}</span>

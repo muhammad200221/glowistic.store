@@ -15,11 +15,9 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Conversion rates relative to USD (base price)
+// Iraqi Dinar conversion rate
 const EXCHANGE_RATES: Record<Currency, number> = {
-  USD: 1,
   IQD: 1310, // 1 USD = 1,310 Iraqi Dinar
-  EUR: 0.92, // 1 USD = 0.92 EUR
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -28,10 +26,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved && ['ckb', 'ar', 'en'].includes(saved) ? saved : 'ckb';
   });
 
-  const [currency, setCurrencyState] = useState<Currency>(() => {
-    const saved = (localStorage.getItem('glowistic_currency') || localStorage.getItem('lilas_currency')) as Currency;
-    return saved && ['USD', 'IQD', 'EUR'].includes(saved) ? saved : 'USD';
-  });
+  const [currency, setCurrencyState] = useState<Currency>('IQD');
 
   const direction: Direction = language === 'en' ? 'ltr' : 'rtl';
   const isRTL = direction === 'rtl';
@@ -43,7 +38,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [language, direction]);
 
   useEffect(() => {
-    localStorage.setItem('glowistic_currency', currency);
+    localStorage.setItem('glowistic_currency', 'IQD');
   }, [currency]);
 
   const setLanguage = (lang: Language) => {
@@ -68,20 +63,15 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const formatPrice = (priceInUSD: number): string => {
-    const rate = EXCHANGE_RATES[currency] || 1;
+    const rate = EXCHANGE_RATES.IQD || 1310;
     const converted = priceInUSD * rate;
+    // Round to nearest 250 IQD for clean, realistic Iraqi pricing
+    const rounded = Math.round(converted / 250) * 250;
 
-    if (currency === 'IQD') {
-      // Round to nearest 250 or 500 IQD for realistic Iraqi Dinar pricing
-      const rounded = Math.round(converted / 250) * 250;
-      return `${rounded.toLocaleString('en-US')} د.ع`;
+    if (language === 'en') {
+      return `${rounded.toLocaleString('en-US')} IQD`;
     }
-
-    if (currency === 'EUR') {
-      return `€${converted.toFixed(2)}`;
-    }
-
-    return `$${converted.toFixed(2)}`;
+    return `${rounded.toLocaleString('en-US')} د.ع`;
   };
 
   return (

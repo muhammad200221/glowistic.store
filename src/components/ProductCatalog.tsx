@@ -160,22 +160,33 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 {t('filterByCategory')}
               </h4>
               <div className="space-y-1">
-                {categoriesList.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setFilters({ ...filters, category: cat.id })}
-                    className={`w-full text-start px-2.5 py-1.5 rounded-sm text-xs transition-colors flex items-center justify-between cursor-pointer ${
-                      filters.category === cat.id
-                        ? 'bg-[#F2ECE3] text-[#1A1816] font-semibold'
-                        : 'text-[#5C5247] hover:bg-[#F9F6F0]'
-                    }`}
-                  >
-                    <span>{t(cat.labelKey)}</span>
-                    {filters.category === cat.id && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#8C532B]" />
-                    )}
-                  </button>
-                ))}
+                {categoriesList.map((cat) => {
+                  const catCount =
+                    cat.id === 'all'
+                      ? products.length
+                      : products.filter((p) => p.category === cat.id).length;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setFilters({ ...filters, category: cat.id })}
+                      className={`w-full text-start px-2.5 py-1.5 rounded-sm text-xs transition-colors flex items-center justify-between cursor-pointer ${
+                        filters.category === cat.id
+                          ? 'bg-[#F2ECE3] text-[#1A1816] font-semibold'
+                          : 'text-[#5C5247] hover:bg-[#F9F6F0]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span>{t(cat.labelKey)}</span>
+                        <span className="text-[10px] font-mono text-[#8C7E72]">
+                          ({catCount})
+                        </span>
+                      </div>
+                      {filters.category === cat.id && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#8C532B]" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

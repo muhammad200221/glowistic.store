@@ -10,7 +10,7 @@ import {
   X,
   Check,
 } from 'lucide-react';
-import { Language, Currency, ProductCategory } from '../types';
+import { Language, ProductCategory } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
 interface HeaderProps {
@@ -38,21 +38,16 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAbout,
   onOpenContact,
 }) => {
-  const { language, setLanguage, currency, setCurrency, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
-  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const langRef = useRef<HTMLDivElement>(null);
-  const currRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) {
         setLangDropdownOpen(false);
-      }
-      if (currRef.current && !currRef.current.contains(e.target as Node)) {
-        setCurrencyDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -63,12 +58,6 @@ export const Header: React.FC<HeaderProps> = ({
     { code: 'ckb', label: 'کوردی (سۆرانی)', subLabel: 'Kurdish Sorani', flag: '☀️' },
     { code: 'ar', label: 'العربية', subLabel: 'Arabic', flag: '✨' },
     { code: 'en', label: 'English', subLabel: 'English (UK/US)', flag: '🌐' },
-  ];
-
-  const currencies: { code: Currency; label: string }[] = [
-    { code: 'USD', label: 'USD ($)' },
-    { code: 'IQD', label: 'IQD (د.ع)' },
-    { code: 'EUR', label: 'EUR (€)' },
   ];
 
   return (
@@ -82,35 +71,11 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs shrink-0">
-            <div className="relative" ref={currRef}>
-              <button
-                onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
-                className="flex items-center gap-1 text-[11px] text-[#D0C5B8] hover:text-white transition-colors cursor-pointer"
-              >
-                <span>{currency}</span>
-                <ChevronDown className="w-3 h-3" />
-              </button>
-
-              {currencyDropdownOpen && (
-                <div className="absolute top-full end-0 mt-2 w-28 bg-white border border-[#E0D5C7] rounded-sm shadow-lg py-1 z-50 text-start">
-                  {currencies.map((c) => (
-                    <button
-                      key={c.code}
-                      onClick={() => {
-                        setCurrency(c.code);
-                        setCurrencyDropdownOpen(false);
-                      }}
-                      className="w-full text-start px-3 py-1.5 text-xs text-[#1A1816] hover:bg-[#F6F1E9] flex items-center justify-between cursor-pointer"
-                    >
-                      <span>{c.label}</span>
-                      {currency === c.code && (
-                        <Check className="w-3 h-3 text-[#8C532B]" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
+          <div className="flex items-center gap-3 text-xs shrink-0">
+            {/* Exclusive Iraqi Dinar currency badge */}
+            <div className="flex items-center gap-1.5 text-[11px] text-[#E0D5C7] bg-[#2A241F] px-2.5 py-0.5 rounded-xs border border-[#3E352C]">
+              <span className="font-semibold text-[#E5B887]">د.ع</span>
+              <span className="text-[10px] text-[#A89C8F]">IQD</span>
             </div>
 
             <div className="relative" ref={langRef}>

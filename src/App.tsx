@@ -189,7 +189,7 @@ const MainContent: React.FC = () => {
 
             <TrustBadges />
 
-            <FeaturedCategories onSelectCategory={handleSelectCategory} />
+            <FeaturedCategories onSelectCategory={handleSelectCategory} products={PRODUCTS} />
 
             {/* Trending / Cult Favorites Section */}
             <section id="featured-section" className="py-16 sm:py-20 bg-[#FAF9F5] border-t border-[#EAE3D9]">

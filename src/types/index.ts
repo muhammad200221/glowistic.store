@@ -1,6 +1,6 @@
 export type Language = 'ckb' | 'ar' | 'en';
 export type Direction = 'rtl' | 'ltr';
-export type Currency = 'USD' | 'IQD' | 'EUR';
+export type Currency = 'IQD';
 
 export type ProductCategory = 'all' | 'skincare' | 'makeup' | 'haircare' | 'fragrance';
 export type SkinType = 'all' | 'dry' | 'oily' | 'sensitive' | 'combination';
