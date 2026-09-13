@@ -355,6 +355,21 @@ export function downloadVipExcel(membersList?: VipMember[]): void {
 }
 
 if (typeof window !== 'undefined') {
-  (window as unknown as { downloadVipExcel: (list?: VipMember[]) => void; getVipWaitlist: () => VipMember[] }).downloadVipExcel = downloadVipExcel;
-  (window as unknown as { downloadVipExcel: (list?: VipMember[]) => void; getVipWaitlist: () => VipMember[] }).getVipWaitlist = getLocalVipMembers;
+  (window as unknown as {
+    downloadVipExcel: (list?: VipMember[]) => Promise<void>;
+    getVipWaitlist: () => Promise<VipMember[]>;
+  }).downloadVipExcel = async (list?: VipMember[]) => {
+    if (list) {
+      downloadVipExcel(list);
+    } else {
+      const cloudMembers = await fetchAllVipMembers();
+      downloadVipExcel(cloudMembers);
+    }
+  };
+  (window as unknown as {
+    downloadVipExcel: (list?: VipMember[]) => Promise<void>;
+    getVipWaitlist: () => Promise<VipMember[]>;
+  }).getVipWaitlist = async () => {
+    return await fetchAllVipMembers();
+  };
 }
