@@ -22,6 +22,7 @@ import { Language } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
 import { registerVipMember, getDeviceClaimedVip, VipMember, VipRegistrationStatus } from '../utils/vip';
 import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
+import { AdminVipModal } from './AdminVipModal';
 
 interface ComingSoonProps {
   onEnterStore?: () => void;
@@ -34,6 +35,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
   const [vipResult, setVipResult] = useState<{ member: VipMember; status: VipRegistrationStatus } | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [isAdminVipModalOpen, setIsAdminVipModalOpen] = useState(false);
 
   // Check if this mobile device already claimed a VIP code
   useEffect(() => {
@@ -496,7 +498,16 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
       {/* Footer */}
       <footer className="relative z-20 w-full border-t border-[#EAE3D9] py-6 px-4 text-center bg-[#FAF9F5]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#7D7063]">
-          <p>© 2026 GLOWISTIC Beauty Boutique. {t('allRightsReserved')}</p>
+          <div className="flex items-center gap-3">
+            <p>© 2026 GLOWISTIC Beauty Boutique. {t('allRightsReserved')}</p>
+            <button
+              onClick={() => setIsAdminVipModalOpen(true)}
+              className="text-[11px] text-[#A39486] hover:text-[#1A1816] underline underline-offset-4 transition-colors cursor-pointer"
+              title="بینینی خشتە و داگرتنی فایلی ئێگزڵ"
+            >
+              📊 فایلی ئێگزڵی VIP
+            </button>
+          </div>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href={INSTAGRAM_LINK}
@@ -514,6 +525,12 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
           </div>
         </div>
       </footer>
+
+      {/* Admin VIP Excel Viewer & Downloader Modal */}
+      <AdminVipModal
+        isOpen={isAdminVipModalOpen}
+        onClose={() => setIsAdminVipModalOpen(false)}
+      />
     </div>
   );
 };
