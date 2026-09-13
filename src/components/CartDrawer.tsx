@@ -165,6 +165,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     alt={item.product.name[language] || item.product.name.en}
                     category={item.product.category}
                     className="w-full h-full"
+                    logoSize="sm"
                   />
                 </div>
 

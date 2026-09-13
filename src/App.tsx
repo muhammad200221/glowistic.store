@@ -161,7 +161,7 @@ const MainContent: React.FC = () => {
       {/* Top Preview Mode Notification Bar */}
       <div className="bg-[#1A1816] text-[#FAF9F5] text-xs py-2 px-4 border-b border-[#3A3229] flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#E58C4A] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-medium text-[#FAF9F5] text-[11px] sm:text-xs">
             {t('previewBannerNotice')}
           </span>

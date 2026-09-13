@@ -3,7 +3,7 @@ import { Language } from '../types';
 export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   ckb: {
     // Top Bar & Header
-    announcement: 'ئاگاداری: لە ئێستادا هیچ بەرهەمێک لە ستۆردا بەردەست نییە - بەم زووانە باری نوێ بەردەست دەبێتەوە',
+    announcement: 'سەرجەم بەرهەمەکان لە ئێستادا بەردەستن لە کۆگا — گەیاندنی خێرا بۆ هەموو کوردستان و عێراق',
     currency: 'دراو',
     language: 'زمان',
     home: 'سەرەکی',
@@ -72,10 +72,11 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     sortRating: 'بەرزترین هەڵسەنگاندن',
     sortNewest: 'نوێترین بەرهەم',
     clearFilters: 'سڕینەوەی فلتەرەکان',
-    filterByCategory: 'هاوپۆل',
+    filterByCategory: 'هاوپۆل (کەیتەگۆری)',
+    filterByBrand: 'براندەکان (Brands)',
+    allBrands: 'هەموو براندەکان',
     filterByPrice: 'نرخ',
     filterBySkinType: 'جۆری پێست',
-    filterByBrand: 'مارکە',
     skinAll: 'هەموو پێستەکان',
     skinDry: 'وشک',
     skinOily: 'چەور و زیپکەدار',
@@ -242,7 +243,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     feature3Desc: 'بە دیناری عێراقی لە کاتی گەیشتنی بەرهەمەکانت بە دڵنیاییەوە بدە.',
     previewStoreBtn: 'پێشبینینی فرۆشگا (Store Preview)',
     backToComingSoonBtn: 'گەڕانەوە بۆ پەڕەی (بەم زووانە)',
-    previewBannerNotice: 'تۆ لە ئێستادا لە دۆخی پێشبینین دایت · فرۆشگای فەرمی بەم زووانە دەکرێتەوە',
+    previewBannerNotice: 'سەرجەم بەرهەمەکان بەردەستن لە کۆگا · ئێستا دەتوانیت داواکاری تۆمار بکەیت',
     contactWhatsapp: 'پەیوەندی لە ڕێگەی واتسئاپ',
     contactInstagram: 'ئینستاگرام (Instagram)',
     followInstagram: 'فۆڵۆمان بکەن لە ئینستاگرام',
@@ -251,7 +252,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   ar: {
     // Top Bar & Header
-    announcement: 'تنويه: جميع المنتجات غير متوفرة حالياً في المتجر - ستتوفر قريباً مع الشحنة الجديدة',
+    announcement: 'جميع المنتجات متوفرة حالياً في المتجر — توصيل سريع لكافة محافظات العراق وكردستان',
     currency: 'العملة',
     language: 'اللغة',
     home: 'الرئيسية',
@@ -321,9 +322,10 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     sortNewest: 'الأحدث أولاً',
     clearFilters: 'إعادة ضبط الفلاتر',
     filterByCategory: 'التصنيف',
+    filterByBrand: 'الماركات (Brands)',
+    allBrands: 'جميع الماركات',
     filterByPrice: 'نطاق السعر',
     filterBySkinType: 'نوع البشرة',
-    filterByBrand: 'الماركة',
     skinAll: 'جميع أنواع البشرة',
     skinDry: 'الجافة',
     skinOily: 'الدهنية والمعرضة للحبوب',
@@ -490,7 +492,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     feature3Desc: 'تسوقي بأمان تام مع الدفع بالدينار العراقي عند استلام طلبك.',
     previewStoreBtn: 'معاينة المتجر (Store Preview)',
     backToComingSoonBtn: 'العودة لصفحة قريباً',
-    previewBannerNotice: 'أنت تتصفح حالياً في وضع المعاينة التجريبي · الافتتاح الرسمي قريباً',
+    previewBannerNotice: 'جميع المنتجات متوفرة حالياً في المخزن · يمكنك إتمام طلبك الآن',
     contactWhatsapp: 'تواصل عبر واتساب',
     contactInstagram: 'إنستغرام (Instagram)',
     followInstagram: 'تابعونا على إنستغرام',
@@ -499,7 +501,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   en: {
     // Top Bar & Header
-    announcement: 'Notice: All products are currently out of stock - Restocking coming soon',
+    announcement: 'All products are now in stock — Express delivery available across Kurdistan & Iraq',
     currency: 'Currency',
     language: 'Language',
     home: 'Home',
@@ -569,9 +571,10 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     sortNewest: 'Newest Arrivals',
     clearFilters: 'Clear Filters',
     filterByCategory: 'Category',
+    filterByBrand: 'Brands',
+    allBrands: 'All Brands',
     filterByPrice: 'Price Range',
     filterBySkinType: 'Skin Type',
-    filterByBrand: 'Brand',
     skinAll: 'All Skin Types',
     skinDry: 'Dry',
     skinOily: 'Oily & Acne-Prone',
@@ -738,7 +741,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     feature3Desc: 'Safe & secure payment in Iraqi Dinars directly upon receipt.',
     previewStoreBtn: 'Preview Store',
     backToComingSoonBtn: 'Back to Coming Soon',
-    previewBannerNotice: 'You are viewing the store in Preview Mode · Official Launch Coming Soon',
+    previewBannerNotice: 'All products are now in stock · You can place your order now',
     contactWhatsapp: 'Chat on WhatsApp',
     contactInstagram: 'Instagram',
     followInstagram: 'Follow on Instagram',

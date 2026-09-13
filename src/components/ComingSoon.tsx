@@ -21,12 +21,13 @@ import { useLanguage } from '../context/LanguageContext';
 import { Language } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
 import { registerVipMember, getDeviceClaimedVip, VipMember, VipRegistrationStatus } from '../utils/vip';
+import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 
 interface ComingSoonProps {
   onEnterStore?: () => void;
 }
 
-export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore }) => {
+export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterStore }) => {
   const { language, setLanguage, isRTL, t } = useLanguage();
   const [contactInput, setContactInput] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -46,28 +47,27 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore }) => {
     }
   }, []);
 
-  // Dynamic countdown timer (14 days from initial load or persistent timestamp)
+  // Countdown timer targeting October 1, 2026 at 8:00 PM (20:00) local Iraq/Baghdad time (UTC+3)
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
     hours: number;
     minutes: number;
     seconds: number;
   }>({
-    days: 14,
-    hours: 8,
-    minutes: 42,
-    seconds: 19,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   useEffect(() => {
-    // Target date: 14 days from when first initialized or fixed future launch
-    const target = new Date();
-    target.setDate(target.getDate() + 14);
-    target.setHours(18, 0, 0, 0);
+    // Target date: October 1, 2026 at 20:00:00 (8:00 PM) in Iraq Time (UTC+3)
+    // 2026-10-01T20:00:00+03:00 = 1790874000000 ms
+    const targetTimestamp = new Date('2026-10-01T20:00:00+03:00').getTime();
 
-    const interval = setInterval(() => {
+    const calculateTime = () => {
       const now = new Date().getTime();
-      const diff = Math.max(0, target.getTime() - now);
+      const diff = Math.max(0, targetTimestamp - now);
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -75,7 +75,10 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore }) => {
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
       setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
+    };
+
+    calculateTime();
+    const interval = setInterval(calculateTime, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -118,11 +121,18 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between">
           {/* Brand Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#1A1816] flex items-center justify-center text-[#E5B887] shadow-xs">
-              <Sparkles className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D5B085] shadow-xs bg-[#1A1816]">
+              <img
+                src={brandLogoImg}
+                alt="GLOWISTIC"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <span className="text-lg font-serif font-bold tracking-wider text-[#1A1816]">
+              <span
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                className="text-lg font-serif font-bold tracking-wider text-[#1A1816]"
+              >
                 GLOWISTIC
               </span>
               <span className="hidden sm:inline-block ms-2 text-[11px] text-[#8C7B6E] tracking-widest uppercase">
@@ -459,7 +469,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore }) => {
           </div>
         </div>
 
-        {/* Contact and Preview Shortcut */}
+        {/* Contact and Social Shortcut */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           <a
             href={WHATSAPP_LINK}

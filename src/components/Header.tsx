@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Language, ProductCategory } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 
 interface HeaderProps {
   cartCount: number;
@@ -136,14 +137,23 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={onNavigateHome}
-              className="text-start flex flex-col group cursor-pointer"
+              className="text-start flex items-center gap-2.5 group cursor-pointer"
             >
-              <span className="text-xl sm:text-2xl font-serif tracking-tight font-semibold text-[#1A1816] group-hover:text-[#8C532B] transition-colors">
-                GLOWISTIC
-              </span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-[#8C532B] font-medium hidden sm:block">
-                {language === 'ckb' ? 'گلۆویستیک' : language === 'ar' ? 'غلويستيك' : 'Luxury Beauty & Cosmetics'}
-              </span>
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#D5B085] shadow-xs shrink-0 group-hover:scale-105 transition-transform bg-[#1A1816]">
+                <img
+                  src={brandLogoImg}
+                  alt="GLOWISTIC"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl sm:text-2xl font-serif tracking-tight font-semibold text-[#1A1816] group-hover:text-[#8C532B] transition-colors leading-tight">
+                  GLOWISTIC
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.25em] text-[#8C532B] font-medium hidden sm:block">
+                  {language === 'ckb' ? 'گلۆویستیک' : language === 'ar' ? 'غلويستيك' : 'Luxury Beauty & Cosmetics'}
+                </span>
+              </div>
             </button>
           </div>
 

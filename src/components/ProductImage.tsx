@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Sparkles, Droplets, Sparkle } from 'lucide-react';
 import { ProductCategory } from '../types';
+import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 
-interface ProductImageProps {
+export interface ProductImageProps {
   src?: string;
   alt: string;
   category?: ProductCategory;
   className?: string;
   badge?: string;
+  showBrandLogo?: boolean;
+  logoSize?: 'sm' | 'md' | 'lg';
 }
 
 export const ProductImage: React.FC<ProductImageProps> = ({
@@ -16,6 +19,8 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   category = 'skincare',
   className = '',
   badge,
+  showBrandLogo = true,
+  logoSize = 'md',
 }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -80,6 +85,71 @@ export const ProductImage: React.FC<ProductImageProps> = ({
             {badge}
           </span>
         </div>
+      )}
+
+      {/* Brand Official Logo Watermark & Authenticity Seal */}
+      {showBrandLogo && (
+        <>
+          {logoSize === 'sm' && (
+            <div
+              className="absolute bottom-1.5 start-1.5 z-10 pointer-events-none select-none drop-shadow-sm"
+              title="GLOWISTIC Verified"
+            >
+              <div className="w-5 h-5 rounded-full overflow-hidden p-[1px] bg-white/95 backdrop-blur-xs border border-[#D5B085]/80 shadow-xs flex items-center justify-center">
+                <img
+                  src={brandLogoImg}
+                  alt="GLOWISTIC Brand Logo"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+            </div>
+          )}
+
+          {logoSize === 'md' && (
+            <div
+              className="absolute bottom-2.5 start-2.5 z-10 pointer-events-none select-none transition-all duration-300 sm:group-hover:bottom-12 drop-shadow-sm"
+              title="GLOWISTIC Verified Authentic"
+            >
+              <div className="flex items-center gap-1.5 py-1 ps-1 pe-2.5 rounded-full bg-white/92 backdrop-blur-md border border-[#E2D5C3]/90 shadow-sm transition-transform group-hover:scale-105">
+                <div className="w-5 h-5 rounded-full overflow-hidden border border-[#C69C6D]/80 shrink-0 bg-[#1A1816]">
+                  <img
+                    src={brandLogoImg}
+                    alt="GLOWISTIC"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-[9.5px] font-serif font-bold tracking-widest text-[#1A1816] uppercase leading-none">
+                  GLOWISTIC
+                </span>
+              </div>
+            </div>
+          )}
+
+          {logoSize === 'lg' && (
+            <div
+              className="absolute bottom-3.5 start-3.5 z-10 pointer-events-none select-none drop-shadow-md"
+              title="GLOWISTIC Boutique Verified Authentic"
+            >
+              <div className="flex items-center gap-2.5 py-1.5 ps-1.5 pe-3.5 rounded-full bg-white/95 backdrop-blur-md border border-[#D5B085]/70 shadow-md">
+                <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C69C6D] shrink-0 bg-[#1A1816]">
+                  <img
+                    src={brandLogoImg}
+                    alt="GLOWISTIC Brand Logo"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex flex-col text-start">
+                  <span className="text-[11px] font-serif font-bold tracking-widest text-[#1A1816] uppercase leading-tight">
+                    GLOWISTIC
+                  </span>
+                  <span className="text-[8px] tracking-wider text-[#8C532B] font-medium uppercase leading-none">
+                    Official Boutique · 100% Original
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

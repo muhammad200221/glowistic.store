@@ -130,6 +130,7 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                 category={product.category}
                 className="w-full h-full"
                 badge={product.isBestSeller ? t('bestSeller') : undefined}
+                logoSize="lg"
               />
             </div>
 

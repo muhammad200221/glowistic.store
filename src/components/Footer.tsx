@@ -3,6 +3,7 @@ import { Send, Check, ShieldCheck, Heart, MessageCircle, Camera } from 'lucide-r
 import { useLanguage } from '../context/LanguageContext';
 import { ProductCategory } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
+import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 
 interface FooterProps {
   onSelectCategory: (cat: ProductCategory) => void;
@@ -73,13 +74,22 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12 text-xs">
           
           <div className="lg:col-span-2 space-y-4">
-            <div>
-              <span className="text-2xl font-serif font-semibold text-white tracking-tight">
-                GLOWISTIC
-              </span>
-              <span className="block text-[10px] uppercase tracking-[0.25em] text-[#E5B887] mt-1">
-                {language === 'ckb' ? 'گلۆویستیک' : language === 'ar' ? 'غلويستيك' : 'Luxury Beauty & Cosmetics'}
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-[#D5B085] shadow-xs shrink-0 bg-[#1A1816]">
+                <img
+                  src={brandLogoImg}
+                  alt="GLOWISTIC"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <span className="text-2xl font-serif font-semibold text-white tracking-tight">
+                  GLOWISTIC
+                </span>
+                <span className="block text-[10px] uppercase tracking-[0.25em] text-[#E5B887] mt-0.5">
+                  {language === 'ckb' ? 'گلۆویستیک' : language === 'ar' ? 'غلويستيك' : 'Luxury Beauty & Cosmetics'}
+                </span>
+              </div>
             </div>
 
             <p className="text-xs text-[#9E9084] leading-relaxed max-w-sm">

@@ -113,6 +113,7 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
                     alt={product.name[language] || product.name.en}
                     category={product.category}
                     className="w-full h-full"
+                    logoSize="sm"
                   />
                 </div>
 
