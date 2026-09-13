@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // VIP waitlist entries
+    match /vip_members/{memberId} {
+      // Allow visitors to register (create)
+      allow create: if request.resource.data.contact is string && request.resource.data.code is string;
+      // Allow reading VIP list so admin can view/download Excel
+      allow read: if true;
+      // Prohibit unauthorized modifications or deletions
+      allow update, delete: if false;
+    }
+  }
+}

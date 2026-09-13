@@ -7,11 +7,12 @@ import {
   Search,
   CheckCircle,
   Copy,
-  Trash2,
   RefreshCw,
+  Cloud,
 } from 'lucide-react';
 import {
-  getVipMembers,
+  fetchAllVipMembers,
+  subscribeToVipMembers,
   downloadVipExcel,
   generateVipCsv,
   VipMember,
@@ -24,19 +25,32 @@ interface AdminVipModalProps {
 
 export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose }) => {
   const [members, setMembers] = useState<VipMember[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [copiedAllCsv, setCopiedAllCsv] = useState(false);
 
-  const loadMembers = () => {
-    setMembers(getVipMembers());
-  };
-
   useEffect(() => {
-    if (isOpen) {
-      loadMembers();
-    }
+    if (!isOpen) return;
+
+    setIsLoading(true);
+    // Realtime subscription to Firebase Cloud Firestore
+    const unsubscribe = subscribeToVipMembers((updated) => {
+      setMembers(updated);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, [isOpen]);
+
+  const handleManualRefresh = async () => {
+    setIsLoading(true);
+    const data = await fetchAllVipMembers();
+    setMembers(data);
+    setIsLoading(false);
+  };
 
   if (!isOpen) return null;
 
@@ -56,7 +70,7 @@ export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose })
   };
 
   const handleCopyCsvText = () => {
-    const csv = generateVipCsv();
+    const csv = generateVipCsv(members);
     navigator.clipboard.writeText(csv);
     setCopiedAllCsv(true);
     setTimeout(() => setCopiedAllCsv(false), 2000);
@@ -76,13 +90,17 @@ export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose })
             </div>
             <div>
               <h3 className="font-serif font-bold text-lg text-[#1A1816] flex items-center gap-2">
-                <span>تۆماری کڕیارانی VIP (داگرتن و بینینی ئێگزڵ)</span>
+                <span>تۆماری کڕیارانی VIP (Firebase Cloud)</span>
                 <span className="px-2 py-0.5 rounded-full bg-[#8C532B]/10 text-[#8C532B] text-xs font-mono font-semibold">
                   {members.length} کڕیار
                 </span>
+                <span className="inline-flex items-center gap-1 text-[11px] font-normal text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  <Cloud className="w-3 h-3" />
+                  داتابەیسی هەور
+                </span>
               </h3>
               <p className="text-xs text-[#6E6154] mt-0.5">
-                تەواوی کۆدەکان، ژمارەی مۆبایل و ئیمەیڵەکانی VIP Launch Access
+                تەواوی کۆدەکان، ژمارەی مۆبایل و ئیمەیڵەکان ڕاستەوخۆ لە سێرڤەری هەور دەخوێندرێنەوە
               </p>
             </div>
           </div>
@@ -109,7 +127,7 @@ export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose })
 
           <div className="flex items-center gap-2">
             <button
-              onClick={downloadVipExcel}
+              onClick={() => downloadVipExcel(members)}
               className="px-3.5 py-1.5 rounded-sm bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
               title="داگرتنی فایلی ئێگزڵ بۆ کۆمپیوتەر"
             >
@@ -136,23 +154,29 @@ export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose })
             </button>
 
             <button
-              onClick={loadMembers}
-              className="p-1.5 rounded-sm border border-[#D0C2B4] bg-white hover:bg-[#F7F3EE] text-[#444] transition-colors cursor-pointer"
-              title="نوێکردنەوە"
+              onClick={handleManualRefresh}
+              disabled={isLoading}
+              className="p-1.5 rounded-sm border border-[#D0C2B4] bg-white hover:bg-[#F7F3EE] text-[#444] transition-colors cursor-pointer disabled:opacity-50"
+              title="نوێکردنەوە لە سێرڤەر"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-[#8C532B]' : ''}`} />
             </button>
           </div>
         </div>
 
         {/* Table Content */}
         <div className="flex-1 overflow-auto p-4">
-          {filteredMembers.length === 0 ? (
+          {isLoading && members.length === 0 ? (
+            <div className="text-center py-12 text-[#8C7B6E]">
+              <RefreshCw className="w-8 h-8 mx-auto mb-2 animate-spin text-[#8C532B]" />
+              <p className="text-xs">بارکردنی داتاکان لە داتابەیسی هەورەوە...</p>
+            </div>
+          ) : filteredMembers.length === 0 ? (
             <div className="text-center py-12 text-[#8C7B6E]">
               <Users className="w-10 h-10 mx-auto mb-2 text-[#C4B5A5]" />
-              <p className="font-medium text-sm text-[#332A22]">هیچ تۆمارێک نەدۆزرایەوە</p>
+              <p className="font-medium text-sm text-[#332A22]">هیچ تۆمارێک لە داتابەیسدا نییە</p>
               <p className="text-xs text-[#8A7B6E] mt-1 max-w-sm mx-auto">
-                هەر کڕیارێک ژمارەی مۆبایل یان ئیمەیڵی خۆی لە VIP Launch بنووسێت، لەم خشتەیەدا بە کۆدی داشکاندنەکەیەوە دەردەکەوێت.
+                هەر کڕیارێک لەمەودوا ژمارەی مۆبایل یان ئیمەیڵی خۆی بنووسێت، ڕاستەوخۆ دەچێتە داتابەیسی هەور و هەرگیز ناسڕێتەوە.
               </p>
             </div>
           ) : (
@@ -227,7 +251,7 @@ export const AdminVipModal: React.FC<AdminVipModalProps> = ({ isOpen, onClose })
         {/* Footer info */}
         <div className="p-3.5 border-t border-[#EAE3D9] bg-white text-xs text-[#7D7063] flex flex-wrap items-center justify-between gap-2">
           <span>
-            دەتوانیت دوگمەی سەوزی <strong>«داگرتنی فایلی ئێگزڵ»</strong> دابگریت تا فایلەکە ڕاستەوخۆ بکەیتەوە لەناو بەرنامەی Microsoft Excel یان Google Sheets.
+            داتاکان بە شێوەی ڕاستەوخۆ (Realtime) لە <strong>Firebase Firestore</strong> کۆدەکرێنەوە. دەتوانیت فایلی ئێگزڵ دابگریت.
           </span>
           <button
             onClick={onClose}

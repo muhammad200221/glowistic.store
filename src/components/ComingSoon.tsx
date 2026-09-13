@@ -20,7 +20,7 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { Language } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
-import { registerVipMember, getDeviceClaimedVip, VipMember, VipRegistrationStatus } from '../utils/vip';
+import { registerVipMember, registerVipMemberAsync, getDeviceClaimedVip, VipMember, VipRegistrationStatus } from '../utils/vip';
 import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 import { AdminVipModal } from './AdminVipModal';
 
@@ -85,11 +85,12 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
     return () => clearInterval(interval);
   }, []);
 
-  const handleNotifySubmit = (e: React.FormEvent) => {
+  const handleNotifySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactInput.trim()) return;
 
-    const result = registerVipMember(contactInput.trim());
+    // Save to Firestore Cloud & local storage
+    const result = await registerVipMemberAsync(contactInput.trim());
     setVipResult(result);
     setIsSubmitted(true);
   };
