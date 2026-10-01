@@ -2,7 +2,7 @@ export type Language = 'ckb' | 'ar' | 'en';
 export type Direction = 'rtl' | 'ltr';
 export type Currency = 'IQD';
 
-export type ProductCategory = 'all' | 'skincare' | 'makeup' | 'haircare' | 'fragrance';
+export type ProductCategory = 'all' | 'skincare' | 'makeup' | 'haircare' | 'fragrance' | 'bodywash';
 export type SkinType = 'all' | 'dry' | 'oily' | 'sensitive' | 'combination';
 
 export interface LocalizedString {

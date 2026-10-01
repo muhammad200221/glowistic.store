@@ -3,6 +3,10 @@ import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { ReviewsProvider } from './context/ReviewsContext';
 import { PRODUCTS } from './data/products';
 import { Product, ProductCategory, CartItem, ProductShade } from './types';
+import {
+  subscribeToLiveProducts,
+  getCachedMergedProducts,
+} from './utils/productManager';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { TrustBadges } from './components/TrustBadges';
@@ -16,16 +20,36 @@ import { WishlistDrawer } from './components/WishlistDrawer';
 import { SearchModal } from './components/SearchModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AboutModal, ContactModal } from './components/InfoModals';
+import { AdminModal } from './components/AdminModal';
 import { Footer } from './components/Footer';
 import { ComingSoon } from './components/ComingSoon';
-import { ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { LAUNCH_TIMESTAMP, checkIsStoreLaunched } from './constants/launch';
+import { ArrowRight, ArrowLeft, Sparkles, Settings } from 'lucide-react';
 
 const MainContent: React.FC = () => {
   const { isRTL, t } = useLanguage();
 
-  const [currentView, setCurrentView] = useState<'coming_soon' | 'home' | 'shop'>('coming_soon');
+  const [storeLaunched, setStoreLaunched] = useState(() => checkIsStoreLaunched());
+  const [currentView, setCurrentView] = useState<'coming_soon' | 'home' | 'shop'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('preview') === 'true' || params.get('admin') === 'true') {
+      return 'home';
+    }
+    return checkIsStoreLaunched() ? 'home' : 'coming_soon';
+  });
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+
+  // Live products managed dynamically by store owner
+  const [liveProducts, setLiveProducts] = useState<Product[]>(() => getCachedMergedProducts());
+
+  // Subscribe to real-time additions, price edits, and deletions
+  useEffect(() => {
+    const unsubscribe = subscribeToLiveProducts((merged) => {
+      setLiveProducts(merged);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
@@ -75,9 +99,39 @@ const MainContent: React.FC = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const [checkoutDiscount, setCheckoutDiscount] = useState(0);
   const [checkoutGiftWrap, setCheckoutGiftWrap] = useState(false);
+
+  // Hidden shortcut for store owner to open management modal: Ctrl+Shift+A or URL ?admin=true
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        setIsAdminOpen((prev) => !prev);
+      }
+    };
+    if (window.location.search.includes('admin=true') || window.location.search.includes('admin=1')) {
+      setIsAdminOpen(true);
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Auto-launch store when countdown timer expires
+  useEffect(() => {
+    if (storeLaunched) return;
+    const checkLaunch = () => {
+      if (checkIsStoreLaunched()) {
+        setStoreLaunched(true);
+        setCurrentView('home');
+      }
+    };
+    checkLaunch();
+    const interval = setInterval(checkLaunch, 1000);
+    return () => clearInterval(interval);
+  }, [storeLaunched]);
 
   const handleClearCart = () => {
     setCartItems([]);
@@ -152,32 +206,28 @@ const MainContent: React.FC = () => {
 
   const totalCartCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
 
-  if (currentView === 'coming_soon') {
-    return <ComingSoon />;
+  if (currentView === 'coming_soon' && !storeLaunched) {
+    return (
+      <ComingSoon
+        onTimerExpired={() => {
+          setStoreLaunched(true);
+          setCurrentView('home');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onEnterStore={
+          new URLSearchParams(window.location.search).get('preview') === 'true'
+            ? () => {
+                setCurrentView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            : undefined
+        }
+      />
+    );
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#1A1816]">
-      {/* Top Preview Mode Notification Bar */}
-      <div className="bg-[#1A1816] text-[#FAF9F5] text-xs py-2 px-4 border-b border-[#3A3229] flex items-center justify-between sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-medium text-[#FAF9F5] text-[11px] sm:text-xs">
-            {t('previewBannerNotice')}
-          </span>
-        </div>
-        <button
-          onClick={() => {
-            setCurrentView('coming_soon');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className="px-3 py-1 rounded-xs bg-[#2F2720] hover:bg-[#44382E] text-[#E5B887] text-[11px] font-medium border border-[#524436] transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
-        >
-          <Sparkles className="w-3 h-3 text-[#E5B887]" />
-          <span>{t('backToComingSoonBtn')}</span>
-        </button>
-      </div>
-
       <Header
         cartCount={totalCartCount}
         wishlistCount={wishlistIds.length}
@@ -214,7 +264,7 @@ const MainContent: React.FC = () => {
 
             <TrustBadges />
 
-            <FeaturedCategories onSelectCategory={handleSelectCategory} products={PRODUCTS} />
+            <FeaturedCategories onSelectCategory={handleSelectCategory} products={liveProducts} />
 
             {/* Trending / Cult Favorites Section */}
             <section id="featured-section" className="py-16 sm:py-20 bg-[#FAF9F5] border-t border-[#EAE3D9]">
@@ -242,7 +292,7 @@ const MainContent: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                  {PRODUCTS.slice(0, 6).map((product) => (
+                  {liveProducts.slice(0, 6).map((product) => (
                     <ProductCard
                       key={product.id}
                       product={product}
@@ -265,7 +315,7 @@ const MainContent: React.FC = () => {
           </>
         ) : (
           <ProductCatalog
-            products={PRODUCTS}
+            products={liveProducts}
             initialCategory={selectedCategory}
             onQuickView={setQuickViewProduct}
             onAddToCart={handleAddToCart}
@@ -303,7 +353,7 @@ const MainContent: React.FC = () => {
       <WishlistDrawer
         isOpen={isWishlistOpen}
         onClose={() => setIsWishlistOpen(false)}
-        products={PRODUCTS}
+        products={liveProducts}
         wishlistIds={wishlistIds}
         onRemoveFromWishlist={handleToggleWishlist}
         onAddToCart={(p) => handleAddToCart(p)}
@@ -314,7 +364,7 @@ const MainContent: React.FC = () => {
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        products={PRODUCTS}
+        products={liveProducts}
         onSelectProduct={setQuickViewProduct}
       />
 
@@ -329,6 +379,17 @@ const MainContent: React.FC = () => {
 
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+
+      {/* Store Owner Product Management Modal */}
+      <AdminModal
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+        products={liveProducts}
+        onOpenProductDetail={(p) => {
+          setQuickViewProduct(p);
+          setIsAdminOpen(false);
+        }}
+      />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   Menu,
   X,
   Check,
+  Settings,
 } from 'lucide-react';
 import { Language, ProductCategory } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -25,6 +26,8 @@ interface HeaderProps {
   onSelectCategory: (cat: ProductCategory) => void;
   onOpenAbout: () => void;
   onOpenContact: () => void;
+  onNavigateComingSoon?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,6 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectCategory,
   onOpenAbout,
   onOpenContact,
+  onNavigateComingSoon,
+  onOpenAdmin,
 }) => {
   const { language, setLanguage, t } = useLanguage();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -201,6 +206,12 @@ export const Header: React.FC<HeaderProps> = ({
                   {t('catHaircare')}
                 </button>
                 <button
+                  onClick={() => onSelectCategory('bodywash')}
+                  className="w-full text-start px-4 py-2 text-xs text-[#2A241F] hover:bg-[#FAF6F0] hover:text-[#8C532B] cursor-pointer"
+                >
+                  {t('catBodywash')}
+                </button>
+                <button
                   onClick={() => onSelectCategory('fragrance')}
                   className="w-full text-start px-4 py-2 text-xs text-[#2A241F] hover:bg-[#FAF6F0] hover:text-[#8C532B] cursor-pointer"
                 >
@@ -222,6 +233,16 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {t('contact')}
             </button>
+
+            {onNavigateComingSoon && (
+              <button
+                onClick={onNavigateComingSoon}
+                className="px-2.5 py-1 rounded-xs bg-[#FAF2EB] text-[#8C532B] hover:bg-[#8C532B] hover:text-white border border-[#E8D6C6] transition-colors cursor-pointer tracking-wide flex items-center gap-1 font-semibold"
+              >
+                <Sparkles className="w-3 h-3 text-[#8C532B] group-hover:text-white" />
+                <span>{t('comingSoonBadge')}</span>
+              </button>
+            )}
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -258,6 +279,17 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               )}
             </button>
+
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                title={t('adminTitle')}
+                className="p-2 text-[#6E6256] hover:text-[#8C532B] hover:bg-[#F3EDE2] rounded-full transition-colors cursor-pointer border border-[#E5DACD]"
+                aria-label="Admin Product Manager"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -313,6 +345,15 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={() => {
+                  onSelectCategory('bodywash');
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-xs py-1 text-[#665A4E] hover:text-[#8C532B]"
+              >
+                {t('catBodywash')}
+              </button>
+              <button
+                onClick={() => {
                   onSelectCategory('fragrance');
                   setMobileMenuOpen(false);
                 }}
@@ -339,6 +380,29 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {t('contact')}
             </button>
+            {onNavigateComingSoon && (
+              <button
+                onClick={() => {
+                  onNavigateComingSoon();
+                  setMobileMenuOpen(false);
+                }}
+                className="block w-full text-start py-2 text-[#8C532B] font-medium hover:text-[#5E3418]"
+              >
+                ✨ {t('comingSoonBadge')}
+              </button>
+            )}
+            {onOpenAdmin && (
+              <button
+                onClick={() => {
+                  onOpenAdmin();
+                  setMobileMenuOpen(false);
+                }}
+                className="block w-full text-start py-2 text-[#6E6256] hover:text-[#8C532B] border-t border-[#EAE3D9] mt-2 pt-2 flex items-center gap-2 text-xs"
+              >
+                <Settings className="w-3.5 h-3.5" />
+                <span>{t('adminTitle')}</span>
+              </button>
+            )}
           </div>
         </div>
       )}

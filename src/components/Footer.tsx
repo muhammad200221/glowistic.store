@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Check, ShieldCheck, Heart, MessageCircle, Camera } from 'lucide-react';
+import { Send, Check, ShieldCheck, Heart, MessageCircle, Camera, Lock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { ProductCategory } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
@@ -9,12 +9,16 @@ interface FooterProps {
   onSelectCategory: (cat: ProductCategory) => void;
   onOpenAbout: () => void;
   onOpenContact: () => void;
+  onNavigateComingSoon?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onSelectCategory,
   onOpenAbout,
   onOpenContact,
+  onNavigateComingSoon,
+  onOpenAdmin,
 }) => {
   const { language, t } = useLanguage();
   const [email, setEmail] = useState('');
@@ -155,6 +159,14 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
+                  onClick={() => onSelectCategory('bodywash')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  {t('catBodywash')}
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onSelectCategory('fragrance')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
@@ -185,6 +197,16 @@ export const Footer: React.FC<FooterProps> = ({
                   {t('contact')}
                 </button>
               </li>
+              {onNavigateComingSoon && (
+                <li>
+                  <button
+                    onClick={onNavigateComingSoon}
+                    className="text-[#E5B887] hover:text-white transition-colors cursor-pointer flex items-center gap-1 font-medium"
+                  >
+                    ✨ {t('comingSoonBadge')}
+                  </button>
+                </li>
+              )}
               <li>
                 <span className="hover:text-white transition-colors cursor-pointer">
                   {t('boutiqueTitle')}
@@ -235,6 +257,17 @@ export const Footer: React.FC<FooterProps> = ({
                   Track Delivery
                 </span>
               </li>
+              {onOpenAdmin && (
+                <li className="pt-2 border-t border-[#29231E]">
+                  <button
+                    onClick={onOpenAdmin}
+                    className="hover:text-[#E5B887] text-[#A89A8D] transition-colors cursor-pointer flex items-center gap-1.5 text-xs"
+                  >
+                    <Lock className="w-3 h-3 text-[#8C532B]" />
+                    <span>{t('adminTitle')}</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

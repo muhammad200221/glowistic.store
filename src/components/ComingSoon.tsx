@@ -16,18 +16,21 @@ import {
   Mail,
   Phone,
   Send,
+  ShoppingBag,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Language } from '../types';
 import { WHATSAPP_LINK, INSTAGRAM_LINK, INSTAGRAM_HANDLE } from '../constants/contact';
 import { registerVipMember, registerVipMemberAsync, getDeviceClaimedVip, VipMember, VipRegistrationStatus } from '../utils/vip';
+import { LAUNCH_TIMESTAMP } from '../constants/launch';
 import brandLogoImg from '../assets/images/instagram_profile_logo_1789135947210.jpg';
 
 interface ComingSoonProps {
   onEnterStore?: () => void;
+  onTimerExpired?: () => void;
 }
 
-export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterStore }) => {
+export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore, onTimerExpired }) => {
   const { language, setLanguage, isRTL, t } = useLanguage();
   const [contactInput, setContactInput] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -61,13 +64,17 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
   });
 
   useEffect(() => {
-    // Target date: October 1, 2026 at 20:00:00 (8:00 PM) in Iraq Time (UTC+3)
-    // 2026-10-01T20:00:00+03:00 = 1790874000000 ms
-    const targetTimestamp = new Date('2026-10-01T20:00:00+03:00').getTime();
-
     const calculateTime = () => {
-      const now = new Date().getTime();
-      const diff = Math.max(0, targetTimestamp - now);
+      const now = Date.now();
+      const diff = Math.max(0, LAUNCH_TIMESTAMP - now);
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        if (onTimerExpired) {
+          onTimerExpired();
+        }
+        return;
+      }
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -81,7 +88,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
     const interval = setInterval(calculateTime, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [onTimerExpired]);
 
   const handleNotifySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,6 +151,17 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-3">
+            {/* Enter Store Button */}
+            {onEnterStore && (
+              <button
+                onClick={onEnterStore}
+                className="px-3.5 py-1.5 bg-[#1A1816] text-[#FAF9F5] rounded-sm text-xs font-medium hover:bg-[#332A22] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 text-[#E5B887]" />
+                <span>{t('shop')}</span>
+              </button>
+            )}
+
             {/* Language Selector */}
             <div className="relative">
               <button
@@ -472,6 +490,16 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({ onEnterStore: _onEnterSt
 
         {/* Contact and Social Shortcut */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          {onEnterStore && (
+            <button
+              onClick={onEnterStore}
+              className="px-4 py-2 rounded-sm border border-[#1A1816] bg-[#1A1816] text-xs font-medium text-[#FAF9F5] hover:bg-[#332A22] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
+            >
+              <ShoppingBag className="w-4 h-4 text-[#E5B887]" />
+              <span>{t('previewStoreBtn')}</span>
+            </button>
+          )}
+
           <a
             href={WHATSAPP_LINK}
             target="_blank"

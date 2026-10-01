@@ -162,7 +162,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="w-20 h-20 rounded-sm overflow-hidden bg-[#F3EDE6] shrink-0 border border-[#EAE3D9]">
                   <ProductImage
                     src={item.product.image}
-                    alt={item.product.name[language] || item.product.name.en}
+                    alt={item.product.name.en || item.product.name[language]}
                     category={item.product.category}
                     className="w-full h-full"
                     logoSize="sm"
@@ -172,8 +172,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="text-xs font-medium text-[#1A1816] line-clamp-1">
-                        {item.product.name[language] || item.product.name.en}
+                      <h4 className="text-xs font-medium text-[#1A1816] line-clamp-1 font-sans" dir="ltr">
+                        {item.product.name.en || item.product.name[language]}
                       </h4>
                       <button
                         onClick={() => onRemoveItem(idx)}

@@ -24,10 +24,15 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   const { formatPrice, t } = useLanguage();
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
+  const highestPrice = useMemo(() => {
+    if (products.length === 0) return 250;
+    return Math.ceil(Math.max(...products.map((p) => p.price || 0), 250));
+  }, [products]);
+
   const [filters, setFilters] = useState<FilterState>({
     category: initialCategory,
     minPrice: 0,
-    maxPrice: 150,
+    maxPrice: 250,
     brand: 'all',
     skinType: 'all',
     sortBy: 'featured',
@@ -43,6 +48,16 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       }));
     }
   }, [initialCategory]);
+
+  // Adjust max price if higher price products arrive
+  useEffect(() => {
+    if (highestPrice > filters.maxPrice) {
+      setFilters((prev) => ({
+        ...prev,
+        maxPrice: highestPrice,
+      }));
+    }
+  }, [highestPrice]);
 
   // Dynamically extract all brands present in products
   const brands = useMemo(() => {
@@ -68,7 +83,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
         if (filters.brand !== 'all' && p.brand !== filters.brand) return false;
         if (filters.skinType !== 'all') {
-          if (!p.skinType.includes(filters.skinType) && !p.skinType.includes('all')) return false;
+          if (!p.skinType || (!p.skinType.includes(filters.skinType) && !p.skinType.includes('all'))) return false;
         }
         return true;
       })
@@ -87,7 +102,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     setFilters({
       category: 'all',
       minPrice: 0,
-      maxPrice: 150,
+      maxPrice: highestPrice,
       brand: 'all',
       skinType: 'all',
       sortBy: 'featured',
@@ -100,6 +115,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     { id: 'skincare', labelKey: 'catSkincare' },
     { id: 'makeup', labelKey: 'catMakeup' },
     { id: 'haircare', labelKey: 'catHaircare' },
+    { id: 'bodywash', labelKey: 'catBodywash' },
     { id: 'fragrance', labelKey: 'catFragrance' },
   ];
 
@@ -287,8 +303,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               </div>
               <input
                 type="range"
-                min={20}
-                max={150}
+                min={10}
+                max={highestPrice}
                 step={5}
                 value={filters.maxPrice}
                 onChange={(e) => setFilters({ ...filters, maxPrice: Number(e.target.value) })}
@@ -296,7 +312,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               />
               <div className="flex justify-between text-[10px] text-[#8C7D70] font-mono mt-1">
                 <span>{formatPrice(0)}</span>
-                <span>{formatPrice(150)}</span>
+                <span>{formatPrice(highestPrice)}</span>
               </div>
             </div>
 

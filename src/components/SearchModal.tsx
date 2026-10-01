@@ -105,7 +105,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <div className="w-14 h-14 rounded-sm overflow-hidden bg-[#F3EDE6] shrink-0 border border-[#EAE3D9]">
                     <ProductImage
                       src={product.image}
-                      alt={product.name[language] || product.name.en}
+                      alt={product.name.en || product.name[language]}
                       category={product.category}
                       className="w-full h-full"
                       logoSize="sm"
@@ -116,8 +116,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     <span className="text-[10px] tracking-wider uppercase text-[#8C532B] font-semibold block">
                       {product.brand}
                     </span>
-                    <h4 className="text-xs sm:text-sm font-medium text-[#1A1816] truncate group-hover:text-[#8C532B] transition-colors">
-                      {product.name[language] || product.name.en}
+                    <h4 className="text-xs sm:text-sm font-medium text-[#1A1816] truncate group-hover:text-[#8C532B] transition-colors font-sans" dir="ltr">
+                      {product.name.en || product.name[language]}
                     </h4>
                     <span className="text-xs font-mono font-bold text-[#1A1816] tabular-nums">
                       {formatPrice(product.price)}

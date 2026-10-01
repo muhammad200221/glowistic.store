@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ArrowLeft, Droplets, Sparkles, Wind, Flame } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Droplets, Sparkles, Wind, Flame, Bath } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Product, ProductCategory } from '../types';
 import { PRODUCTS } from '../data/products';
@@ -72,6 +72,20 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({
       tag: 'Botanical',
     },
     {
+      id: 'bodywash',
+      name: t('catBodywash'),
+      description: {
+        ckb: 'شامپۆی لەشی کۆری، سیراماید، پرۆتینی شیر و باوباب',
+        ar: 'غسول الجسم الكوري الفاخر، سيراميد وبروتين الحليب',
+        en: 'Korean luxury body wash, ceramide & milk protein',
+      },
+      count: getCategoryCount('bodywash'),
+      bgClass: 'from-[#F5F2ED] to-[#E5DDD2]',
+      borderClass: 'border-[#D9CFBF]',
+      icon: Bath,
+      tag: 'Pampering',
+    },
+    {
       id: 'fragrance',
       name: t('catFragrance'),
       description: {
@@ -104,7 +118,7 @@ export const FeaturedCategories: React.FC<FeaturedCategoriesProps> = ({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {categories.map((cat) => {
             const Icon = cat.icon;
             return (

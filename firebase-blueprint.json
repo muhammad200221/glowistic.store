@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "vip_members": {
+      "fields": {
+        "contact": { "type": "string" },
+        "code": { "type": "string" },
+        "normalizedContact": { "type": "string" },
+        "type": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "custom_products": {
+      "fields": {
+        "id": { "type": "string" },
+        "sku": { "type": "string" },
+        "name": { "type": "map" },
+        "subtitle": { "type": "map" },
+        "category": { "type": "string" },
+        "brand": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "volume": { "type": "string" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "image": { "type": "string" },
+        "inStock": { "type": "boolean" },
+        "stockCount": { "type": "number" },
+        "skinType": { "type": "array" },
+        "description": { "type": "map" },
+        "howToUse": { "type": "map" },
+        "ingredients": { "type": "map" },
+        "safetyNotes": { "type": "map" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "store_settings": {
+      "fields": {
+        "deletedProductIds": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

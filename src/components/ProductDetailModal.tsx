@@ -126,7 +126,7 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
             <div className="relative aspect-1/1 w-full rounded-sm overflow-hidden bg-[#F3EDE6] border border-[#EAE3D9]">
               <ProductImage
                 src={product.image}
-                alt={product.name[language] || product.name.en}
+                alt={product.name.en || product.name[language]}
                 category={product.category}
                 className="w-full h-full"
                 badge={product.isBestSeller ? t('bestSeller') : undefined}
@@ -167,8 +167,8 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                 </button>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-serif font-medium text-[#1A1816] mb-2 leading-snug">
-                {product.name[language] || product.name.en}
+              <h2 className="text-xl sm:text-2xl font-serif font-medium text-[#1A1816] mb-2 leading-snug" dir="ltr">
+                {product.name.en || product.name[language]}
               </h2>
 
               <p className="text-xs sm:text-sm text-[#665A4E] mb-4">
@@ -280,8 +280,8 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
                           <span className="w-5 h-5 rounded-full bg-[#8C532B]/10 text-[#8C532B] font-mono text-[11px] font-bold flex items-center justify-center shrink-0">
                             {idx + 1}
                           </span>
-                          <span className="font-medium text-[#1A1816]">
-                            {item.name[language] || item.name.en}
+                          <span className="font-medium text-[#1A1816]" dir="ltr">
+                            {item.name.en || item.name[language]}
                           </span>
                         </div>
                         <span className="text-[11px] font-mono text-[#8C532B] bg-[#F4EFEA] px-2 py-0.5 rounded-xs font-medium shrink-0">
@@ -446,16 +446,24 @@ const ProductDetailContent: React.FC<ProductDetailContentProps> = ({
 
                 <div className="text-xs text-[#52463B] leading-relaxed min-h-[90px]">
                   {activeTab === 'desc' && (
-                    <p>{product.description[language] || product.description.en}</p>
+                    <p className="whitespace-pre-line">
+                      {product.description?.[language] || product.description?.ckb || product.description?.en}
+                    </p>
                   )}
                   {activeTab === 'usage' && (
-                    <p>{product.howToUse[language] || product.howToUse.en}</p>
+                    <p className="whitespace-pre-line">
+                      {product.howToUse?.[language] || product.howToUse?.ckb || product.howToUse?.en}
+                    </p>
                   )}
                   {activeTab === 'ingredients' && (
-                    <p>{product.ingredients[language] || product.ingredients.en}</p>
+                    <p className="whitespace-pre-line">
+                      {product.ingredients?.[language] || product.ingredients?.ckb || product.ingredients?.en}
+                    </p>
                   )}
                   {activeTab === 'safety' && (
-                    <p>{product.safetyNotes[language] || product.safetyNotes.en}</p>
+                    <p className="whitespace-pre-line">
+                      {product.safetyNotes?.[language] || product.safetyNotes?.ckb || product.safetyNotes?.en}
+                    </p>
                   )}
                 </div>
 

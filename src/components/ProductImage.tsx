@@ -30,6 +30,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
     skincare: { bg: 'from-[#FAF4EF] via-[#F4EBE1] to-[#EBDCCF]', iconColor: 'text-[#A0704F]', label: 'Botanical Skincare' },
     makeup: { bg: 'from-[#FDF2F2] via-[#F8E2E4] to-[#ECD1D4]', iconColor: 'text-[#963749]', label: 'Haute Makeup' },
     haircare: { bg: 'from-[#FAF6EE] via-[#F4EBD7] to-[#E5D7BE]', iconColor: 'text-[#8A6A32]', label: 'Pure Haircare' },
+    bodywash: { bg: 'from-[#F5F3ED] via-[#ECE7DD] to-[#DDD4C7]', iconColor: 'text-[#7C6651]', label: 'Body Care & Wash' },
     fragrance: { bg: 'from-[#F7F3EE] via-[#EFE6DC] to-[#DECFC0]', iconColor: 'text-[#7D5C40]', label: 'Haute Parfumerie' },
   };
 

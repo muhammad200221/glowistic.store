@@ -10,5 +10,15 @@ service cloud.firestore {
       // Prohibit unauthorized modifications or deletions
       allow update, delete: if false;
     }
+
+    // Dynamic products added or modified by store owner
+    match /custom_products/{productId} {
+      allow read, write: if true;
+    }
+
+    // Deleted product IDs and global store settings
+    match /store_settings/{settingId} {
+      allow read, write: if true;
+    }
   }
 }

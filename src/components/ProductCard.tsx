@@ -58,7 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative aspect-4/3 sm:aspect-1/1 w-full overflow-hidden bg-[#F4EFEA]">
         <ProductImage
           src={product.image}
-          alt={product.name[language] || product.name.en}
+          alt={product.name.en || product.name[language]}
           category={product.category}
           className={`w-full h-full ${!product.inStock ? 'opacity-90' : ''}`}
           badge={badgeText}
@@ -110,8 +110,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span>{product.volume}</span>
           </div>
 
-          <h3 className="text-sm sm:text-base font-medium text-[#1A1816] group-hover:text-[#8C532B] transition-colors line-clamp-1 mb-1">
-            {product.name[language] || product.name.en}
+          <h3 className="text-sm sm:text-base font-medium text-[#1A1816] group-hover:text-[#8C532B] transition-colors line-clamp-1 mb-1 font-sans" dir="ltr">
+            {product.name.en || product.name[language]}
           </h3>
 
           <p className="text-xs text-[#6B5E52] line-clamp-1 mb-2">

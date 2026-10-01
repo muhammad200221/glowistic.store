@@ -110,7 +110,7 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
                 >
                   <ProductImage
                     src={product.image}
-                    alt={product.name[language] || product.name.en}
+                    alt={product.name.en || product.name[language]}
                     category={product.category}
                     className="w-full h-full"
                     logoSize="sm"
@@ -125,9 +125,10 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
                           onQuickView(product);
                           onClose();
                         }}
-                        className="text-xs font-medium text-[#1A1816] line-clamp-1 cursor-pointer hover:text-[#8C532B]"
+                        className="text-xs font-medium text-[#1A1816] line-clamp-1 cursor-pointer hover:text-[#8C532B] font-sans"
+                        dir="ltr"
                       >
-                        {product.name[language] || product.name.en}
+                        {product.name.en || product.name[language]}
                       </h4>
                       <button
                         onClick={() => onRemoveFromWishlist(product)}
